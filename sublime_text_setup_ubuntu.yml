@@ -1,18 +1,30 @@
 ---
-- name: Install Sublime Text and Packages on Ubuntu
+- name: Set up Sublime Text and environment on Ubuntu-based server
   hosts: localhost
   become: yes
+  vars:
+    github_repo: "https://github.com/ShadowbyteLabs/ansible"
+    clone_dest: "/home/ubuntu/ansible"
+  
   tasks:
     - name: Update the apt cache
       apt:
         update_cache: yes
 
-    - name: Install prerequisites (curl and wget)
+    - name: Install prerequisites (curl, wget, git, and ansible)
       apt:
-        name: 
+        name:
           - curl
           - wget
+          - git
+          - ansible
         state: present
+
+    - name: Clone the GitHub repository
+      git:
+        repo: "{{ github_repo }}"
+        dest: "{{ clone_dest }}"
+        force: yes
 
     - name: Add Sublime Text GPG key
       apt_key:
@@ -73,3 +85,4 @@
     - name: Restart Sublime Text
       shell: pkill sublime_text || true
       ignore_errors: true
+

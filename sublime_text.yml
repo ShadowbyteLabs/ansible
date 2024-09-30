@@ -1,0 +1,92 @@
+---
+- name: Set up Sublime Text and environment on Debian-based systems (Ubuntu/Debian)
+  hosts: localhost
+  become: yes
+  vars:
+    github_repo: "https://github.com/ShadowbyteLabs/ansible"
+    clone_dest: "/home/{{ ansible_user }}/ansible"
+
+  tasks:
+    - name: Gather facts about the system
+      ansible.builtin.setup:
+        gather_subset: 'os_family'
+
+    - name: Update the apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install prerequisites (curl, wget, git, and ansible)
+      apt:
+        name:
+          - curl
+          - wget
+          - git
+          - software-properties-common
+          - ansible
+        state: present
+
+    - name: Add Sublime Text GPG key
+      apt_key:
+        url: https://download.sublimetext.com/sublimehq-pub.gpg
+        state: present
+
+    - name: Add Sublime Text APT repository
+      apt_repository:
+        repo: 'deb https://download.sublimetext.com/ apt/stable/'
+        state: present
+
+    - name: Install Sublime Text
+      apt:
+        name: sublime-text
+        state: present
+
+    - name: Ensure Package Control directory exists
+      file:
+        path: ~/.config/sublime-text-3/Installed Packages
+        state: directory
+        mode: '0755'
+
+    - name: Ensure Sublime Text User directory exists
+      file:
+        path: ~/.config/sublime-text-3/Packages/User
+        state: directory
+        mode: '0755'
+
+    - name: Download Package Control
+      get_url:
+        url: https://packagecontrol.io/Package%20Control.sublime-package
+        dest: ~/.config/sublime-text-3/Installed Packages/Package Control.sublime-package
+
+    - name: Create list of Sublime Text packages
+      copy:
+        dest: ~/.config/sublime-text-3/Packages/User/Package Control.sublime-settings
+        content: |
+          {
+              "installed_packages":
+              [
+                  "Ansible",
+                  "BracketHighlighter",
+                  "DocBlockr",
+                  "Coker Based Build Systems",
+                  "Dockerfile Syntax Highlighting",
+                  "Emmet",
+                  "FileManager",
+                  "Git",
+                  "LSP-bash",
+                  "LSP-dockerfile",
+                  "Package Control",
+                  "PHP Companion",
+                  "PHP Syntax Checker",
+                  "PHPUnit",
+                  "SFTP",
+                  "SideBarEnhancements",
+                  "SublimeLinter",
+                  "SublimeLinter-php",
+                  "SublimeLinter-phpcs",
+                  "Terminus"
+              ]
+          }
+
+    - name: Restart Sublime Text
+      shell: pkill sublime_text || true
+      ignore_errors: true

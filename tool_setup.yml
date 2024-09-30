@@ -1,0 +1,33 @@
+---
+- name: Install essential CLI tools
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Update the apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install tmux
+      apt:
+        name: tmux
+        state: present
+
+    - name: Install fzf
+      apt:
+        name: fzf
+        state: present
+
+    - name: Install ripgrep
+      apt:
+        name: ripgrep
+        state: present
+
+    - name: Install mtr (My Traceroute)
+      apt:
+        name: mtr
+        state: present
+
+    - name: Install glances
+      apt:
+        name: glances
+        state: present

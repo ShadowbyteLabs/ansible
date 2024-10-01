@@ -1,0 +1,67 @@
+---
+- name: Add custom aliases to shell configuration
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Detect the user's shell
+      shell: echo $SHELL
+      register: user_shell
+
+    - name: Append aliases to .bashrc if using bash
+      lineinfile:
+        path: ~/.bashrc
+        line: "{{ item }}"
+        insertafter: EOF
+        state: present
+      loop:
+        - "alias nmapbest='nmap -A -T4'"
+        - "alias nmapquick='nmap -sn'"
+        - "alias nmapfull='nmap -p- -sV -sC'"
+        - "alias netwatch='netstat -tulnp'"
+        - "alias listen='ss -tulwn'"
+        - "alias sniff='sudo tshark -i eth0 -w ~/capture.pcap'"
+        - "alias portcheck='lsof -i -P -n | grep LISTEN'"
+        - "alias updatekali='sudo apt update && sudo apt full-upgrade -y'"
+        - "alias syslog='sudo tail -f /var/log/syslog'"
+        - "alias authlog='sudo tail -f /var/log/auth.log'"
+        - "alias dusage='du -h --max-depth=1'"
+        - "alias dspace='df -h'"
+        - "alias topmem='ps aux --sort=-%mem | head -n 11'"
+        - "alias topcpu='ps aux --sort=-%cpu | head -n 11'"
+        - "alias gatewayping='ping $(ip route | grep default | awk ''{print $3}'')'"
+        - "alias digdns='dig +short'"
+        - "alias netrestart='sudo systemctl restart networking'"
+        - "alias up='cd ..'"
+        - "alias myip='ip addr show | grep \"inet \" | grep -v 127.0.0.1'"
+        - "alias clr='clear'"
+      when: "'bash' in user_shell.stdout"
+
+    - name: Append aliases to .zshrc if using zsh
+      lineinfile:
+        path: ~/.zshrc
+        line: "{{ item }}"
+        insertafter: EOF
+        state: present
+      loop:
+        - "alias nmapbest='nmap -A -T4'"
+        - "alias nmapquick='nmap -sn'"
+        - "alias nmapfull='nmap -p- -sV -sC'"
+        - "alias netwatch='netstat -tulnp'"
+        - "alias listen='ss -tulwn'"
+        - "alias sniff='sudo tshark -i eth0 -w ~/capture.pcap'"
+        - "alias portcheck='lsof -i -P -n | grep LISTEN'"
+        - "alias updatekali='sudo apt update && sudo apt full-upgrade -y'"
+        - "alias syslog='sudo tail -f /var/log/syslog'"
+        - "alias authlog='sudo tail -f /var/log/auth.log'"
+        - "alias dusage='du -h --max-depth=1'"
+        - "alias dspace='df -h'"
+        - "alias topmem='ps aux --sort=-%mem | head -n 11'"
+        - "alias topcpu='ps aux --sort=-%cpu | head -n 11'"
+        - "alias gatewayping='ping $(ip route | grep default | awk ''{print $3}'')'"
+        - "alias digdns='dig +short'"
+        - "alias netrestart='sudo systemctl restart networking'"
+        - "alias up='cd ..'"
+        - "alias myip='ip addr show | grep \"inet \" | grep -v 127.0.0.1'"
+        - "alias clr='clear'"
+      when: "'zsh' in user_shell.stdout"
+

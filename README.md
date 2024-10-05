@@ -6,6 +6,7 @@ Welcome to the ShadowbyteLabs Ansible repository! This collection of Ansible pla
     Automated Tool Installation: Installs tools like tmux, fzf, ripgrep, mtr, glances, and more.
     Custom Aliases: Adds commonly used aliases to .bashrc or .zshrc.
     Scalability: Deploy configurations across multiple servers for consistency.
+    Custom Vim text editor settings that are applied in .vimrc file.
 
 🔑 SSH Key Setup
 
@@ -67,6 +68,12 @@ Modify the inventory file with your target servers.
 
 📚 Usage
 Running a Playbook
+
+To set up Custom Vim:
+
+Code:
+
+    ansible-playbook custom_vim.yml
 
 To set up tools:
 

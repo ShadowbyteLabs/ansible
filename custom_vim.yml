@@ -1,0 +1,12 @@
+---
+- name: Deploy custom .vimrc to remote servers
+  hosts: all
+  become: yes
+  tasks:
+    - name: Copy .vimrc to user home directory
+      copy:
+        src: files/.vimrc
+        dest: /home/{{ ansible_user }}/.vimrc
+        owner: "{{ ansible_user }}"
+        mode: '0644'
+

@@ -84,3 +84,4 @@ nnoremap <leader>q :q<CR>       " Quit with leader + q
 nnoremap <leader>e :e           " Edit a file with leader + e
 nnoremap <leader>s :source %<CR>  " Source the current file with leader + s
 
+inoremap jj <Esc>
